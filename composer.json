@@ -1,0 +1,47 @@
+{
+    "name": "lss/yacache",
+    "description": "Lightweight Cache (PSR-16 compatible)",
+    "keywords": [
+        "psr-11",
+        "container",
+        "dependency injection"
+    ],
+    "homepage": "https://github.com/pavarnos/YACache",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Pavarno",
+            "email": "pavarnos@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "ext-apcu": "*",
+        "ext-redis": "*",
+        "phpstan/phpstan": "^0.12.28",
+        "phpstan/phpstan-phpunit": "^0.12.11",
+        "phpstan/phpstan-strict-rules": "^0.12.2",
+        "phpunit/phpunit": "^9.2"
+    },
+    "suggest": {
+        "ext-apcu": "*",
+        "ext-redis": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "LSS\\YACache\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LSS\\YACache\\": "test"
+        }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon"
+    }
+}
