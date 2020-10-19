@@ -24,26 +24,20 @@ class TwoLevelCache extends AbstractCache
         $this->secondary = $secondary;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function set(string $key, $value, int $ttl = self::NEVER_EXPIRES): void
     {
         $this->primary->set($key, $value, $ttl);
         $this->secondary->set($key, $value, $ttl);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function has(string $key): bool
     {
         return $this->primary->has($key) || $this->secondary->has($key);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function get(string $key, $default = null)
     {
         $result = $this->primary->get($key, $default);
@@ -53,15 +47,15 @@ class TwoLevelCache extends AbstractCache
         return $result;
     }
 
-    public function clear(): void
+    /** @inheritDoc */
+    public function clear(): bool
     {
-        $this->primary->clear();
-        $this->secondary->clear();
+        $one = $this->primary->clear();
+        $two = $this->secondary->clear();
+        return $one && $two;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function increment(string $key, int $ttl = self::NEVER_EXPIRES): int
     {
         $value = $this->primary->increment($key, $ttl);
@@ -69,6 +63,7 @@ class TwoLevelCache extends AbstractCache
         return $value;
     }
 
+    /** @inheritDoc */
     public function delete(string $key): void
     {
         $this->primary->delete($key);

@@ -26,9 +26,7 @@ class RedisCache extends AbstractCache
         $this->prefix = rtrim($prefix, ':') . ':';
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function set(string $key, $value, int $ttl = self::NEVER_EXPIRES): void
     {
         if ($ttl != self::NEVER_EXPIRES) {
@@ -38,17 +36,13 @@ class RedisCache extends AbstractCache
         }
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function has(string $key): bool
     {
         return $this->redis->exists($this->makeKey($key)) > 0;
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritDoc */
     public function get(string $key, $default = null)
     {
         $value = $this->redis->get($this->makeKey($key));
@@ -58,18 +52,22 @@ class RedisCache extends AbstractCache
         return is_numeric($value) ? $value : unserialize($value);
     }
 
+    /** @inheritDoc */
     public function delete(string $key): void
     {
         $this->redis->del($this->makeKey($key));
     }
 
-    public function clear(): void
+    /** @inheritDoc */
+    public function clear(): bool
     {
         foreach ($this->getKeys() as $key) {
             $this->delete($key);
         }
+        return true;
     }
 
+    /** @inheritDoc */
     public function increment(string $key, int $ttl = self::NEVER_EXPIRES): int
     {
         $key   = $this->makeKey($key);

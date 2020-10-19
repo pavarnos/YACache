@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace LSS\YACache;
 
+use Carbon\Carbon;
+
 /**
  * Thanks to https://github.com/M6Web/RedisMock/blob/master/src/M6Web/Component/RedisMock/RedisMock.php
  * For the ideas
@@ -75,7 +77,7 @@ class FakeRedis extends \Redis
     {
         $this->value[$key] = $value;
         if (!is_null($timeout)) {
-            $this->expires[$key] = time() + $timeout;
+            $this->expires[$key] = Carbon::now()->timestamp + $timeout;
         }
         $this->returnPipedInfo('OK');
     }
@@ -279,7 +281,7 @@ class FakeRedis extends \Redis
      */
     public function expire($key, $ttl)
     {
-        $this->expires[$key] = time() + $ttl;
+        $this->expires[$key] = Carbon::now()->timestamp + $ttl;
         return $this->returnPipedInfo(1);
     }
 
@@ -357,8 +359,8 @@ class FakeRedis extends \Redis
 
     protected function deleteExpired(string $key)
     {
-        $time = time();
-        if (isset($this->expires[$key]) && $this->expires[$key] < $time) {
+        $time = Carbon::now()->timestamp;
+        if (isset($this->expires[$key]) && $this->expires[$key] <= $time) {
             $this->del($key);
             return true;
         }

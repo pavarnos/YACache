@@ -4,10 +4,10 @@ A minimal PSR16 compatible cache library for PHP 7.4+
  
 The goals of this project are  
   
-- Minimalism: as little code as possible, only the barest necessary features.
-- Performance: Strips out all but essential features in the main execution flow so it runs really fast. 
+- Minimalism: as little code as possible, only the barest necessary features, as few dependencies as possible.
+- Performance: Strips out all but essential features in the main execution flow so that it runs really fast. 
 - (almost) Standards Compliance: [PSR-16](https://www.php-fig.org/psr/psr-16/) does not have strict typing (yet!?). 
-  The `CacheInterface` is duck-type compatible with PSR-16
+  The `CacheInterface` is mostly duck-type compatible with PSR-16 (No support for DateInterval $ttl)
 - adds some tiny and optional utility functions to ease API development eg `increment()` for rate limiters,
   `remember()` to remove boilerplate lines of code  
 - Quality: 100% unit test coverage, phpstan max strict, strict_types=1 

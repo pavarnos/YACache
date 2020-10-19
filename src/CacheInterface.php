@@ -47,12 +47,17 @@ interface CacheInterface
      */
     public function increment(string $key, int $ttl = self::NEVER_EXPIRES): int;
 
+    /**
+     * remove an item from the cache
+     * @param string $key
+     */
     public function delete(string $key): void;
 
     /**
      * delete all items in cache
+     * @return bool true on success, false on failure
      */
-    public function clear(): void;
+    public function clear(): bool;
 
     /**
      * @param string   $key

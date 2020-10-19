@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace LSS\YACache;
 
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 abstract class CacheTestCase extends TestCase
@@ -82,7 +83,8 @@ abstract class CacheTestCase extends TestCase
         self::assertTrue($subject->has($key2));
         self::assertTrue($subject->has($key3));
         self::assertEquals($value3, $subject->get($key3));
-        sleep(2);
+        // items should all expire from cache in $ttl seconds
+        $this->sleep($ttl);
         self::assertFalse($subject->has($key1));
         self::assertFalse($subject->has($key2));
         self::assertFalse($subject->has($key3));
@@ -130,5 +132,16 @@ abstract class CacheTestCase extends TestCase
         $subject->deleteMultiple([$key2, 'no-such']);
         self::assertTrue($subject->has($key1));
         self::assertFalse($subject->has($key2));
+    }
+
+    protected function tearDown(): void
+    {
+        Carbon::setTestNow();
+        parent::tearDown();
+    }
+
+    protected function sleep(int $seconds): void
+    {
+        Carbon::setTestNow(Carbon::now()->addSeconds($seconds));
     }
 }

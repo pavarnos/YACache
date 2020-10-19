@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace LSS\YACache;
 
+use Carbon\Carbon;
+
 class MemoryCache extends AbstractCache
 {
     private string $prefix;
@@ -24,40 +26,29 @@ class MemoryCache extends AbstractCache
         $this->prefix = $prefix;
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $ttl
-     */
+    /** @inheritDoc */
     public function set(string $key, $value, int $ttl = 0): void
     {
         $this->clean();
         $this->data[$this->prefix . $key]    = $value;
-        $this->expires[$this->prefix . $key] = $ttl > 0 ? time() + $ttl : 0;
+        $this->expires[$this->prefix . $key] = $ttl > 0 ? Carbon::now()->addSeconds($ttl)->getTimestamp() : 0;
     }
 
-    /**
-     * @param string     $key
-     * @param mixed|null $default
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function get(string $key, $default = null)
     {
         $this->clean();
         return $this->data[$this->prefix . $key] ?? $default;
     }
 
+    /** @inheritDoc */
     public function has(string $key): bool
     {
         $this->clean();
         return array_key_exists($this->prefix . $key, $this->data);
     }
 
-    /**
-     * @param string $key
-     * @param int    $ttl
-     * @return int
-     */
+    /** @inheritDoc */
     public function increment(string $key, int $ttl = 0): int
     {
         $this->clean();
@@ -69,21 +60,24 @@ class MemoryCache extends AbstractCache
         return 1;
     }
 
+    /** @inheritDoc */
     public function delete(string $key): void
     {
         unset($this->data[$this->prefix . $key]);
         unset($this->expires[$this->prefix . $key]);
     }
 
-    public function clear(): void
+    /** @inheritDoc */
+    public function clear(): bool
     {
         $this->data    = [];
         $this->expires = [];
+        return true;
     }
 
     private function clean(): void
     {
-        $now = time();
+        $now = Carbon::now()->getTimestamp();
         foreach ($this->expires as $key => $expires) {
             if ($expires > 0 && $expires <= $now) {
                 unset($this->data[$key]);

@@ -22,21 +22,13 @@ class APCCache extends AbstractCache
         $this->prefix = $prefix;
     }
 
-    /**
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $ttl
-     */
+    /** @inheritDoc */
     public function set(string $key, $value, int $ttl = 0): void
     {
         apcu_store($this->prefix . $key, $value, $ttl);
     }
 
-    /**
-     * @param string     $key
-     * @param mixed|null $default
-     * @return mixed
-     */
+    /** @inheritDoc */
     public function get(string $key, $default = null)
     {
         if (!$this->has($key)) {
@@ -45,32 +37,31 @@ class APCCache extends AbstractCache
         return apcu_fetch($this->prefix . $key) ?: $default;
     }
 
+    /** @inheritDoc */
     public function has(string $key): bool
     {
         return !empty(apcu_exists($this->prefix . $key));
     }
 
-    /**
-     * @param string $key
-     * @param int    $ttl
-     * @return int
-     */
+    /** @inheritDoc */
     public function increment(string $key, int $ttl = 0): int
     {
         return apcu_inc($this->prefix . $key, 1, $ignored, $ttl);
     }
 
+    /** @inheritDoc */
     public function delete(string $key): void
     {
         apcu_delete($this->prefix . $key);
     }
 
-    public function clear(): void
+    /** @inheritDoc */
+    public function clear(): bool
     {
         if (empty($this->prefix)) {
-            apcu_clear_cache();
+            return apcu_clear_cache();
         } else {
-            apcu_delete(new \APCUIterator('|^' . $this->prefix . '.*|'));
+            return apcu_delete(new \APCUIterator('|^' . $this->prefix . '.*|')) === true;
         }
     }
 }

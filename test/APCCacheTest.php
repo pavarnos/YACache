@@ -16,6 +16,14 @@ class APCCacheTest extends PrefixableCacheTestCase
         return new APCCache($prefix);
     }
 
+    protected function sleep(int $seconds): void
+    {
+        // apc relies on the system clock so we can't fake it with Carbon
+        sleep($seconds);
+        // sleep a little more to allow for rounding error
+        sleep(1);
+    }
+
     protected function tearDown(): void
     {
         (new APCCache())->clear();

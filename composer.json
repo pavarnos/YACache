@@ -21,6 +21,7 @@
     "require-dev": {
         "ext-apcu": "*",
         "ext-redis": "*",
+        "nesbot/carbon": "^2.41",
         "phpstan/phpstan": "^0.12.28",
         "phpstan/phpstan-phpunit": "^0.12.11",
         "phpstan/phpstan-strict-rules": "^0.12.2",
