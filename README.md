@@ -14,7 +14,8 @@ The goals of this project are
 
 Why another cache when there are already so many that are very good?  
 
-- https://packagist.org/packages/desarrolla2/cache is lean and clean but has extra tools for Packing
+- https://github.com/desarrolla2/Cache is lean and clean but has extra tools for Packing (serialisation)
+- https://github.com/terrylinooo/simple-cache has tons of drivers, but an extra layer of indirection (`do*` methods)
 - many other caches (eg https://github.com/symfony/cache) work with [PSR-6](https://www.php-fig.org/psr/psr-6/) (which is very heavy) 
   and then add adapters / wrappers for PSR-16 on top
 - ... or their code has stampede protection or other clever but complicated things which are awesome for bigger projects 
